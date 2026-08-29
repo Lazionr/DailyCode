@@ -1,321 +1,168 @@
 ﻿#include <iostream>
 #include <vector>
 
-using namespace std;
-
-//class Person
+//class Student
 //{
 //public:
-//	// 进入校园/图书馆/实验室刷二维码等身份认证​
+//	//身份认证
 //	void identity()
 //	{
-//		cout << "identity()" << endl;
+//		std::cout << "void identity()" << std::endl;
+//
 //	}
-//protected:
-//	string _name = "peter"; // 姓名​
-//	string _address; // 地址​
-//	string _tel; // 电话​
-//	int _age = 18; // 年龄​
-//};
 //
-//
-//class Student : public Person
-//{
-//public:
-//	//学习
 //	void study()
 //	{
-//		identity();
+//		std::cout << "void study()" << std::endl;
 //	}
-//
-//protected:
-//	string _stuid; //学号
+//private:
+//	std::string _name;
+//	int _age;
+//	std::string _address;
+//	std::string _tel;
+//	
+//	int _id; //学号
+//	//...
 //};
-//
-//
-//class Teacher : public Person
+
+//class Teacher
 //{
 //public:
-//	//授课
+//	//身份认证
+//	void identity()
+//	{
+//		std::cout << "void identity()" << std::endl;
+//
+//	}
+//
 //	void teaching()
 //	{
-//		identity();
-//	}
-//protected:
-//	string title;
-//};
-
-//void test1()
-//{
-//	Student s;
-//	Teacher t;
+//		std::cout << "void teaching()" << std::endl;
 //
-//	s.study();
-//	t.teaching();
-//}
-
-
-//namespace stl
-//{
-//	//继承类模板
-//	//继承stack
-//	template<class T>
-//	class stack : public std::vector<T>
-//	{
-//	public:
-//		void push(const T& x) { vector<T>::push_back(x); }
-//		void pop() { vector<T>::pop_back(); }
-//		const T& top() const { return vector<T>::back(); }
-//		const size_t size() const { return vector<T>::size(); }
-//		const bool empty() const { return vector<T>::empty(); }
-//	};
-//
-//	void test2()
-//	{
-//		stack<int> st;
-//
-//		st.push(1);
-//		st.push(2);
-//		st.push(3);
-//		st.push(4);
-//
-//		while (!st.empty())
-//		{
-//			cout << st.top() << " ";
-//			st.pop();
-//		}
-//		cout << endl;
-//	}
-//
-//}
-//
-//class Person
-//{
-//public:
-//	//1.默认构造函数
-//	Person(const char* name = "peter")
-//		:_name(name)
-//	{
-//		cout << "Person()" << endl;
-//	}
-//
-//	//2.拷贝构造函数
-//	Person(const Person& per)
-//		:_name(per._name)
-//	{
-//		cout << "Person(const Person& per)" << endl;
-//	}
-//
-//	//3.赋值重载
-//	Person& operator=(const Person& per)
-//	{
-//		cout << "Person& operator=(const Person& per)" << endl;
-//		if (&per != this)
-//		{
-//			_name = per._name;
-//		}
-//
-//		return *this;
-//	}
-//
-//	//4.析构函数
-//	~Person()
-//	{
-//		cout << "~Person()" << endl;
-//	}
-//
-//protected:
-//	string _name; // 姓名​
-//};
-//
-//
-//class Student : public Person
-//{
-//public:
-//	//如果不想使用父类的默认值，就需要显示调用父类的默认构造
-//	//1.默认构造
-//	Student(const char* name,const string stuid = "1111")
-//		:Person(name)
-//		,_stuid(stuid)
-//	{
-//		cout << "Student()" << endl;
-//	}
-//
-//
-//	//2.拷贝构造
-//	Student(const Student& stu)
-//		:Person(stu)
-//		,_stuid(stu._stuid)
-//	{
-//		cout << "Student(const Student& stu)" << endl;
-//	}
-//
-//	//3.赋值重载
-//	Student& operator=(const Student& stu)
-//	{
-//		if (&stu != this)
-//		{
-//			//同名函数,显示调用
-//			Person::operator=(stu);
-//			cout << "Student& operator=(const Student& stu)" << endl;
-//			_stuid = stu._stuid;
-//		}
-//
-//		return *this;
-//	}
-//
-//	//4.析构函数
-//	//父类有析构函数，就不需要显示调用
-//	~Student()
-//	{
-//		cout << "~Student()" << endl;
-//	}
-//
-//protected:
-//	string _stuid;
-//};
-//
-//void test3()
-//{
-//	Student s1("zhangsan", "111");
-//	Student s2("lisi", "222");
-//	Student s3(s1);
-//
-//	s3 = s2;
-//
-//}
-//
-//void TEST1()
-//{
-//	//stl::test2();
-//	test3();
-//}
-
-// 不能被继承的类
-//class Base final
-//{
-//public:
-//	Base()
-//	{
-//		cout << "Base()" << endl;
-//	}
-//
-//protected:
-//	int _a = 1;
-//};
-//
-//class Derive : public Base
-//{
-//public:
-//	Derive()
-//	{
-//		cout << "Derive()" << endl;
 //	}
 //
 //private:
-//	int _d = 10;
+//	std::string _name;
+//	int _age;
+//	std::string _address;
+//	std::string _tel;
+//
+//	std::string _title; //职称
+//	//...
 //};
-//
-//void test_1()
-//{
-//	Base b;
-//	Derive d;
-//}
-
-
-//前置声明
-//class Student;
-//
-//class Person
-//{
-//public:
-//	static int _conut;
-//
-//	//此时编译器不知道Student是什么，因此需要前置声明
-//	friend void Getdata(const Person& p, const Student& s);
-//protected:
-//	string _name;
-//};
-//
-////非const的静态成员变量都必须在类外单独定义一次
-//int Person::_conut = 1;
-//
-//class Student : public Person
-//{
-//public:
-//	friend void Getdata(const Person& p, const Student& s);
-//protected:
-//	string _stuid;
-//};
-//
-//void Getdata(const Person& p,const Student& s)
-//{
-//	cout << p._name << endl;
-//	cout << s._stuid << endl;
-//}
-//
-//void test_2()
-//{
-//	Person p;
-//	Student s;
-//
-//	cout << &p._conut << endl;
-//	cout << &s._conut << endl;
-//
-//
-//	cout << p._conut << endl;
-//	cout << s._conut << endl;
-//
-//	//Getdata(p, s);
-//}
 
 class Person
 {
 public:
-	string _name;
-};
-
-class Student : virtual public Person
-{
+	//身份认证
+	void identity()
+	{
+		std::cout << "void identity()" << std::endl;
+	}
 protected:
-	string _stuid;
+	std::string _name;
+	int _age;
+	std::string _address;
+	std::string _tel;
 };
 
-class Teacher : virtual public Person
+class Student : public Person
 {
+public:
+	void study()
+	{
+		std::cout << "void study()" << std::endl;
+	}
 protected:
-	string _id;
+	int _id;
 };
 
-class Assistant : public Student, public Teacher
+class Teacher : public Person
 {
-	//继承下来两份_name
+public:
+	void teaching()
+	{
+		std::cout << "void teaching()" << std::endl;
+	}
 protected:
-	string _tel;
+	std::string _title;
 };
 
 
-void test_3()
+//用继承实现栈
+template<class T>
+class stack : public std::vector<T>
 {
-	Assistant a;
+public:
+	void push(const T& x)
+	{
+		std::vector<T>::push_back(x);
+	}
 
-	//a.Student::_name = "zhangsan";
-	a._name = "zhangsan";
+	void pop()
+	{
+		std::vector<T>::pop_back();
+	}
+ 
+	const T& top() const
+	{
+		return std::vector<T>::back();
+	}
+
+	const bool empty() const
+	{
+		return std::vector<T>::empty();
+	}
+		
+};
+
+void test_template()
+{
+	stack<int> st;
+	
+	st.push(1);
+	st.push(2);
+	st.push(3);
+	st.push(4);
 
 }
 
+void test_conversion()
+{
+	Person per;
+	Student stu;
 
+	//基类对象不能赋值给派生类对象
+	//error C2679: 二元“=”: 没有找到接受“Person”类型的右操作数的运算符(或没有可接受的转换)
+	//stu = per;
 
+	Person* ps = &per;
+	Student* st = &stu;
+
+	//派生类对象指针可以转换成基类对象指针
+	Person* pp = st;
+
+	//基类对象指针可以强转成派生类对象,	
+	Student* ss = (Student*)ps;
+
+}
+
+void test_position()
+{
+	Person per;
+	Student stu;
+
+	std::cout << &per << std::endl;
+	std::cout << &stu << std::endl;
+
+}
 
 
 
 int main()
 {
-	//TEST1();
-
-	//test_1();
-	//test_2();
-	test_3();
+	//test_template();
+	//test_conversion();
+	test_position();
 	return 0;
 }
-
