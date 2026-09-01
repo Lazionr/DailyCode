@@ -154,15 +154,297 @@ void test_position()
 
 	std::cout << &per << std::endl;
 	std::cout << &stu << std::endl;
+}
+
+
+class Animal
+{
+protected:
+	std::string _name = "a";
+};
+
+class Dog : public Animal
+{
+public:
+	void Print()
+	{
+		std::cout << "_name:" << _name << std::endl;
+		std::cout << "_feature:" << _feature << std::endl;
+	}
+protected:
+	std::string _name = "xxx"; //同名成员,隐藏基类_name
+	std::string _feature = "run";
+};
+
+void test_hidden()
+{	
+	Dog d;
+	d.Print();
+}
+
+
+
+namespace stl
+{
+	class Person
+	{
+	public:
+		Person(const char* name = "zhangsan")
+			:_name(name)
+		{
+			std::cout << "Person()" << std::endl;
+		}
+
+		Person(const Person& per)
+			:_name(per._name)
+		{
+			std::cout << "Person(const Person& per)" << std::endl;
+		}
+
+		Person& operator=(const Person& per)
+		{
+			std::cout << "Person& operator=(const Person& per)" << std::endl;
+			if (this != &per)
+			{
+				_name = per._name;
+			}
+
+			return *this;
+		}
+
+		~Person()
+		{
+			std::cout << "~Person()" << std::endl;
+		}
+
+	protected:
+		std::string _name;
+	};
+
+	class Student : public Person
+	{
+	public:
+		//调用基类的构造函数
+		Student(const char* name, std::string stuid)
+			:Person(name)
+			, _stuid(stuid)
+		{
+			std::cout << "Student(const char* name,std::string stuid)" << std::endl;
+		}
+
+		Student(const Student& stu)
+			//显示调用基类的拷贝构造,初始化基类成员
+			:Person(stu)
+			, _stuid(stu._stuid)
+		{
+			std::cout << "Student(const Student& stu)" << std::endl;
+		}
+
+		Student& operator=(const Student& stu)
+		{
+			std::cout << "Student& operator=(const Student& stu)" << std::endl;
+			if (this != &stu)
+			{
+				//指定类域显示调用
+				Person::operator=(stu);//将基类成员进行赋值重载
+				_stuid = stu._stuid;
+			}
+
+			return *this;
+		}
+
+		~Student()
+		{
+			std::cout << "~Student()" << std::endl;
+			//派生类析构之后自动调用基类的析构函数
+		}
+
+	protected:
+		std::string _stuid;
+	};
+
+	//class Base final
+	//{
+	//private:
+	//	//Base()
+	//	//{
+	//	//	//...
+	//	//}
+	//protected:
+	//	int a = 1;
+	//};
+
+	//class Derive : public Base
+	//{
+	//public:
+	//	Derive()
+	//		:Base()
+	//	{
+	//		//...
+	//	}
+	//protected:
+	//	int b = 2;
+	//};
+
+
+	void test_memberfunc()
+	{
+		Student s1("zhangsan", "111");
+		Student s2("lisi", "222");
+		Student s3("wangwu", "333");
+
+		s1 = s3;
+	}
+
+	//在友元声明中出现的类名，在之前必须有一个前向声明
+	class BenZ;
+
+	class Car
+	{
+	public:
+		friend void ShowMsg(const Car* car, const BenZ* benz);
+	protected:
+		std::string _name = "car";
+	};
+
+	class BenZ : public Car
+	{
+		// 派生类不加友元就会报错
+		// error C2248: “stl::BenZ::_feature”: 无法访问 protected 成员(在“stl::BenZ”类中声明)
+	public:
+		friend void ShowMsg(const Car* car, const BenZ* benz);
+	protected:
+		std::string _feature = "comfortable";
+	};
+
+	void ShowMsg(const Car* car, const BenZ* benz)
+	{
+		std::cout << car->_name << std::endl;
+		std::cout << benz->_feature << std::endl;
+	}
+
+	void test_friend()
+	{
+		Car car;
+		BenZ benz;
+
+		ShowMsg(&car, &benz);
+	}
+
+
+	class Animal
+	{
+	public:
+		std::string _name = "a";
+		static int _nums;
+	};
+
+	int Animal::_nums = 10;
+
+	class Dog : public Animal
+	{
+	protected:
+		std::string _feature = "run";
+	};
+
+	void test_static()
+	{
+		Animal aim;
+		Dog dog;
+
+		//判断静态成员地址是否一致
+		std::cout << &(aim._nums) << std::endl;
+		std::cout << &(dog._nums) << std::endl;
+	}
+
 
 }
 
+namespace tst
+{
+	//class food
+	//{
+	//public:
+	//	std::string _category = "food";
+	//};
+
+	//class vegetable : public food
+	//{
+	//public:
+	//	std::string _feature = "green";
+	//};
+
+	//class fruit : public food
+	//{
+	//public:
+	//	std::string _name = "fruit";
+	//};
+
+	//class tomato : public vegetable ,public fruit
+	//{
+	//protected:
+	//	int nums = 10;
+	//};
+
+
+	class food
+	{
+	public:
+		std::string _category = "food";
+	};
+
+	class vegetable : virtual public food
+	{
+	public:
+		std::string _feature = "green";
+	};
+
+	class fruit : virtual public food
+	{
+	public:
+		std::string _name = "fruit";
+	};
+
+	class tomato : public vegetable, public fruit
+	{
+	protected:
+		int nums = 10;
+	};
+
+	void test_binary()
+	{
+		tomato to;
+		
+		//error C2385: 对“_category”的访问不明确
+		//to._category = "fruit";
+
+		//显示指定访问哪个基类的成员可以解决二义性问题，但数据冗余无法解决
+		//to.vegetable::_category = "vegetable";
+		//to.fruit::_category = "fruit";
+
+		to._category = "food";
+
+	}
+
+
+	
+}
 
 
 int main()
 {
 	//test_template();
 	//test_conversion();
-	test_position();
+	//test_position();
+
+	//test_hidden();
+
+	//stl::test_memberfunc();
+
+	//stl::test_friend();
+	//stl::test_static();
+
+	tst::test_binary();
+
 	return 0;
 }
