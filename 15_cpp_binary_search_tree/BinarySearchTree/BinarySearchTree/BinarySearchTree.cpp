@@ -22,6 +22,14 @@ class BST
 public:
 	using Node = BSTNode<K>;
 
+	BST() = default;
+
+	BST(const BST& val)
+	{
+		Node* cur = 
+		while()
+	}
+
 	bool insert(const K& key)
 	{
 		if (_root == nullptr)
@@ -74,6 +82,82 @@ public:
 	void InOrder()
 	{
 		_InOrder(_root);
+		cout << endl;
+	}
+
+	bool erase(const K& key)
+	{
+		Node* cur = _root;
+		Node* parent = nullptr;
+		while (cur)
+		{
+			if (key > cur->_key)
+			{
+				parent = cur;
+				cur = cur->_right;
+			}
+			else if (key < cur->_key)
+			{
+				parent = cur;
+				cur = cur->_left;
+			}
+			else
+			{
+				//右孩子为空
+				if (cur->_right == nullptr)
+				{
+					if (parent == nullptr)
+					{
+						_root = cur->_left;
+					}
+					else
+					{
+						if (parent->_left == cur) parent->_left = cur->_left;
+						else parent->_right = cur->_left;
+					}
+				
+					delete cur;
+					return true;
+				}
+				else if (cur->_left == nullptr)
+				{
+					if (parent == nullptr)
+					{
+						_root = cur->_right;
+					}
+					else
+					{
+						if (parent->_left == cur) parent->_left = cur->_right;
+						else parent->_right = cur->_right;
+					}
+
+					delete cur;
+					return true;
+				}
+				else //两个孩子均不为空
+				{
+					//找到右子树的最左节点
+					Node* RightMinP = cur;
+					Node* RightMin = cur->_right;
+
+					while (RightMin->_left)
+					{
+						RightMinP = RightMin;
+						RightMin = RightMin->_left;
+					}
+
+					cur->_key = RightMin->_key;
+
+					if(RightMinP->_left == RightMin) RightMinP->_left = RightMin->_right;
+					else  RightMinP->_right = RightMin->_right;
+					
+					delete RightMin;
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 private:
@@ -93,13 +177,18 @@ private:
 int main()
 {
 	BST<int> t;
-	int a[] = { 1,6,8,5,7,0,4,2 };
+	int a[] = { 8, 3, 1, 10, 6, 4, 7, 14, 13 };
 	for (auto e : a)
 	{
 		t.insert(e);
 	}
 
 	t.InOrder();
+
+	t.erase(8);
+	t.InOrder();
+
+
 
 	return 0;
 }
