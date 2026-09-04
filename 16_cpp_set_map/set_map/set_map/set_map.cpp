@@ -95,13 +95,32 @@ void test3()
 	cout << endl; 
 }
 
+void test4()
+{
+	map<string, string> dict = { {"left", "左边"}, {"right", "右边"},
+{"insert", "插入"},{ "string", "字符串" } };
+
+	dict["left"] = "左边1";
+	dict["insert"] = "右边2";
+
+	dict["sort"] = "排序";
+
+	for (auto& e : dict)
+	{
+		cout << e.first << ":" << e.second << endl;
+	}
+	cout << endl;
+}
+
+
 
 int main()
 {
 	//test1();
 	//test2();
 
-	test3();
+	//test3();
+	test4();
 
 	return 0;
 }
