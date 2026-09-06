@@ -147,6 +147,19 @@ public:
 
 		RNodeL->_right = RNode;
 		RNode->_parent = RNodeL;
+
+		if (RNodeP == nullptr)
+		{
+			_root = RNodeL;
+			_root->_parent = nullptr;
+		}
+		else
+		{
+			if (RNodeP->_left == RNode) RNode->_left = RNodeL;
+			else RNodeP->_right = RNodeL;
+		}
+
+		RNode->_bf = RNodeL->_bf = 0;
 	}
 
 	void RotateLR()
